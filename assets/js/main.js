@@ -1,70 +1,68 @@
-const personajes = [
-    {
-      id: 1,
-      name: 'Rick Sanchez',
-      status: 'Alive',
-      species: 'Human',
-      type: '',
-      gender: 'Male',
-      origin: {
-        name: 'Earth (C-137)',
-        url: 'https://rickandmortyapi.com/api/location/1',
-      },
-      location: {
-        name: 'Earth (Replacement Dimension)',
-        url: 'https://rickandmortyapi.com/api/location/20',
-      },
-      image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-      episode: [
-        'https://rickandmortyapi.com/api/episode/1',
-        'https://rickandmortyapi.com/api/episode/2',
-        // ...
-      ],
-      url: 'https://rickandmortyapi.com/api/character/1',
-      created: '2017-11-04T18:48:46.250Z',
+import { DetallesPersonajes } from '../../assets/js/detallesPersonajes.js';
+
+let llamadoPersonajes = (() => {
+  const urlAPI = 'https://rickandmortyapi.com/api/character/';
+  const resultados = document.querySelector('.resultados');
+  let datosPersonajes;
+
+  // Función 1
+  let obtenerPersonajes = async () => {
+    try {
+      let respuesta = await fetch(urlAPI);
+      let datos = await respuesta.json();
+      datosPersonajes = datos;
+      // console.log(datosPersonajes);
+      return datos;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  let obtenerDetalles = async (id) => {
+    const urlPje = `https://rickandmortyapi.com/api/character/${id}`;
+    let datosPje;
+    try {
+      let resPje = await fetch(urlPje);
+      let datos = await resPje.json();
+      datosPje = datos;
+      let detallesPersonajes = new DetallesPersonajes();
+      detallesPersonajes.infoGeneral(datosPje.id, datosPje.species);
+      return datos;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return {
+    mostrar: async () => {
+      const personajes = await obtenerPersonajes();
+      const respuestaPersonajes = await personajes.results;
+      respuestaPersonajes.forEach((p) => {
+        obtenerDetalles(p.id);
+        resultados.innerHTML += `
+              <img src=${p.image} />
+              <div class=res id=r${p.id}>
+                    <ul>
+                      <li>
+                        <span>${p.id}</span>
+                      </li>
+                      <li>
+                        <span>${p.species}</span>
+                      </li>
+                    </ul>
+                </div>`;
+      });
     },
-    {
-      id: 183,
-      name: 'Johnny Depp',
-      status: 'Alive',
-      species: 'Human',
-      type: '',
-      gender: 'Male',
-      origin: {
-        name: 'Earth (C-500A)',
-        url: 'https://rickandmortyapi.com/api/location/23',
-      },
-      location: {
-        name: 'Earth (C-500A)',
-        url: 'https://rickandmortyapi.com/api/location/23',
-      },
-      image: 'https://rickandmortyapi.com/api/character/avatar/183.jpeg',
-      episode: ['https://rickandmortyapi.com/api/episode/8'],
-      url: 'https://rickandmortyapi.com/api/character/183',
-      created: '2017-12-29T18:51:29.693Z',
-    },
-    {
-      id: 2,
-      name: 'No lo sé Rick',
-      status: 'Alive',
-      species: 'Human',
-      type: '',
-      gender: 'Male',
-      origin: {
-        name: 'Earth (C-137)',
-        url: 'https://rickandmortyapi.com/api/location/1',
-      },
-      location: {
-        name: 'Earth (Replacement Dimension)',
-        url: 'https://rickandmortyapi.com/api/location/20',
-      },
-      image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-      episode: [
-        'https://rickandmortyapi.com/api/episode/1',
-        'https://rickandmortyapi.com/api/episode/2',
-        // ...
-      ],
-      url: 'https://rickandmortyapi.com/api/character/2',
-      created: '2017-11-04T18:48:46.250Z',
-    },
-  ];
+  };
+})();
+
+setTimeout(() => {
+  let spinner = document.getElementById('spinner');
+  spinner.style.display = 'none';
+  let cantidadMostrada = document.getElementsByClassName('res').length;
+  document.getElementById(
+    'cantidad-personajes'
+  ).innerHTML = `${cantidadMostrada}`;
+}, 2000);
+
+llamadoPersonajes.mostrar();

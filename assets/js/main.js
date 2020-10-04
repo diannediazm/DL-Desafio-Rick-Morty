@@ -5,13 +5,11 @@ let llamadoPersonajes = (() => {
   const resultados = document.querySelector('.resultados');
   let datosPersonajes;
 
-  // Función 1
   let obtenerPersonajes = async () => {
     try {
       let respuesta = await fetch(urlAPI);
       let datos = await respuesta.json();
       datosPersonajes = datos;
-      // console.log(datosPersonajes);
       return datos;
     } catch (error) {
       console.error(error);

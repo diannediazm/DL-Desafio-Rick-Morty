@@ -46,24 +46,6 @@ export class DetallesPersonajes extends Personajes {
     this.setStatus(nuevo_status);
   }
 
-  /*
-  // species ?
-  get species() {
-    return this.getSpecies();
-  }
-
-  set species(nuevo_species) {
-    this.setSpecies(nuevo_species);
-  }
-  // gender ?
-  get gender() {
-    return this.getGender();
-  }
-
-  set gender(nuevo_gender) {
-    this.setGender(nuevo_gender);
-  } */
-
   infoGeneral(id, species) {
     return `
     <ul>
